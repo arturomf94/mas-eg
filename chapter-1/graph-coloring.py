@@ -21,8 +21,7 @@ for agent in eg1.agent_list:
 	agent.domain = domains[agent.id_number]
 	agent.value = random.choice(agent.domain)
 	agent.binary_constraints = [(agent.id_number, other_agent.id_number) for 
-									other_agent in eg1.agent_list 
-									if other_agent.id_number in agent.neighbors]
+									other_agent in agent.neighbors]
 
 
 import pdb;pdb.set_trace()

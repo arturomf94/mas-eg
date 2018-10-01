@@ -8,6 +8,11 @@ class MAS:
         # Initialize neighbors based on the matrix
         for i in range(nb_agents):
             self.agent_list.append(Agent(i, np.nonzero(adjacency_matrix[i])[0]))
+
+        # Update neighbors: 
+        for agent in self.agent_list:
+            neighbor_ids = agent.neighbors
+            agent.neighbors = [self.agent_list[i] for i in neighbor_ids]
             
     def run(self, rounds):
         for i in range(0,rounds):
@@ -17,6 +22,12 @@ class MAS:
         self.tick += 1
         for agent in self.agent_list:
             agent.decide(self.tick)
+        print("tick " + str(self.tick) + " ended")
+
+    def run_arc_consistency(self):
+        self.tick += 1
+        for agent in self.agent_list:
+            agent.arc_consistency()
         print("tick " + str(self.tick) + " ended")
            
 class Agent:
@@ -30,8 +41,16 @@ class Agent:
         self.flag = True
             
     def decide(self, tick):
-        #self.revise()
-        print(self.neighbors)
+        print('something')
+
+    def send_message(self, message, neighbor_id):
+        for neighbor in self.neighbors:
+            if neighbor.id == neighbor_id:
+                neighbor.messages.append(message)
+                break
+
+    # def arc_consistency(self):
+
 
     # def revise(self):
     #     for message in self.messages:
