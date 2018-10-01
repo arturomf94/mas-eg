@@ -37,7 +37,7 @@ class MAS:
                 agents_domain_lengths.append(len(agent.domain))
             if self.tick == final_tick or True in agents_no_solution_flag:
                 finished = True
-                if self.tick == final_tick:
+                if self.tick == final_tick and not True in agents_no_solution_flag:
                     print('Solution found!')
                 if True in agents_no_solution_flag:
                     print('There is no solution!')
