@@ -24,4 +24,4 @@ for agent in eg1.agent_list:
 									other_agent in agent.neighbors]
 
 
-import pdb;pdb.set_trace()
+eg1.run_arc_consistency()

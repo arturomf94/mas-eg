@@ -25,11 +25,22 @@ class MAS:
         print("tick " + str(self.tick) + " ended")
 
     def run_arc_consistency(self):
-        self.tick += 1
-        for agent in self.agent_list:
-            agent.arc_consistency()
-        print("tick " + str(self.tick) + " ended")
-           
+        finished = False
+        while not finished:
+            self.tick += 1
+            agents_finished = []
+            for agent in self.agent_list:
+                agents_finished.append(agent.finished_flag)
+            for agent in self.agent_list:
+                print('Agent ' + str(agent.id_number) + ' has domain: \n')
+                print(agent.domain)
+                agent.arc_consistency()
+            if not False in agents_finished:
+                finished = True
+            print("tick " + str(self.tick) + " ended")
+            if self.tick == 5:
+                break
+       
 class Agent:
     def __init__(self, id_number, neighbors) : 
         self.id_number = id_number
@@ -38,19 +49,25 @@ class Agent:
         self.value = ''
         self.binary_constraints = []
         self.messages = []
-        self.flag = True
+        self.finished_flag = False
             
     def decide(self, tick):
         print('something')
 
-    def send_message(self, message, neighbor_id):
-        for neighbor in self.neighbors:
-            if neighbor.id == neighbor_id:
-                neighbor.messages.append(message)
-                break
+    def send_message(self, message, neighbor):
+        neighbor.messages.append((self.id_number, message))
 
-    # def arc_consistency(self):
-
+    def arc_consistency(self):
+        if len(self.domain) == 1:
+            for neighbor in self.neighbors:
+                self.send_message(self.domain[0], neighbor)
+        if self.messages != []:
+            for message in self.messages:
+                if (self.id_number, message[0]) in self.binary_constraints and \
+                    message[1] in self.domain:
+                    self.domain.remove(message[1])
+        if len(self.domain) == 1 or len(self.domain) == 0:
+            self.finished_flag = True
 
     # def revise(self):
     #     for message in self.messages:
